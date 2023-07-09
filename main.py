@@ -16,8 +16,8 @@ for url in urls:
     # このウェブサイトから記事を取得
     website = newspaper.build(url)
 
-    # 最初の5記事を取得
-    articles = website.articles[:5]
+    # 最初の3記事を取得
+    articles = website.articles[:3]
 
     # 各記事について
     for a in articles:
@@ -35,7 +35,7 @@ for url in urls:
                 {"role": "system", "content": "You are a helpful assistant that summarizes news articles into around 200 characters."},
                 {"role": "user", "content": f"Here's a news article: {text}. Can you summarize it for me in japanese?"},
             ],
-            max_tokens=200
+            max_tokens=300
         )
 
         # 要約を取得
