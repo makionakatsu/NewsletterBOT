@@ -32,16 +32,20 @@ for url in urls:
         response = openai.ChatCompletion.create(
           model="gpt-3.5-turbo",
           messages=[
-                {"role": "system", "content": "You are a helpful assistant that summarizes news articles."},
+                {"role": "system", "content": "You are a helpful assistant that summarizes news articles into around 200 characters."},
                 {"role": "user", "content": f"Here's a news article: {text}. Can you summarize it for me in japanese?"},
-            ]
+            ],
+            max_tokens=200
         )
 
         # 要約を取得
         summary = response['choices'][0]['message']['content']
 
-        # 要約を表示する代わりにディスコードに送信
+        # ディスコードに送信するメッセージをフォーマット
+        message = f"🗞{website.brand}\n🧳{a.title}\n{summary}\n🔗{a.url}"
+
+        # ディスコードに送信
         data = {
-            "content": f"Title: {a.title}\nSummary: {summary}"
+            "content": message
         }
         response = requests.post(WEBHOOK_URL, data=data)
