@@ -28,18 +28,6 @@ for url in urls:
         # 記事の本文を取得
         text = a.text
 
-        # GPT-3.5-turboを使って記事のカテゴリを推測
-        response_category = openai.ChatCompletion.create(
-          model="gpt-3.5-turbo",
-          messages=[
-                {"role": "system", "content": "You are an assistant that categorizes news articles."},
-                {"role": "user", "content": f"Here's a news article: {text}. What category does this belong to?"},
-            ]
-        )
-
-        # カテゴリを取得
-        category = response_category['choices'][0]['message']['content']
-
         # GPT-3.5-turboを使って記事を要約
         response_summary = openai.ChatCompletion.create(
           model="gpt-3.5-turbo",
@@ -54,7 +42,7 @@ for url in urls:
         summary = response_summary['choices'][0]['message']['content']
 
         # ディスコードに送信するメッセージをフォーマット
-        message = f"🗞{website.brand}\n{category}\n🧳{a.title}\n{summary}\n🔗{a.url}"
+        message = f"🗞{website.brand}\🧳{a.title}\n{summary}\n🔗{a.url}"
 
         # ディスコードに送信
         data = {
