@@ -28,21 +28,33 @@ for url in urls:
         # 記事の本文を取得
         text = a.text
 
-        # GPT-3.5-turboを使って記事を要約
-        response = openai.ChatCompletion.create(
-          model="gpt-3.5-turbo-16k",
+        # GPT-3.5-turboを使って記事のカテゴリを推測
+        response_category = openai.ChatCompletion.create(
+          model="gpt-3.5-turbo",
           messages=[
-                {"role": "system", "content": "You are a helpful assistant that summarizes news articles into around 200 characters."},
+                {"role": "system", "content": "You are an assistant that categorizes news articles."},
+                {"role": "user", "content": f"Here's a news article: {text}. What category does this belong to?"},
+            ]
+        )
+
+        # カテゴリを取得
+        category = response_category['choices'][0]['message']['content']
+
+        # GPT-3.5-turboを使って記事を要約
+        response_summary = openai.ChatCompletion.create(
+          model="gpt-3.5-turbo",
+          messages=[
+                {"role": "system", "content": "You are an assistant who summarizes news articles in Japanese into about 200 characters. You can generate interesting sentences."},
                 {"role": "user", "content": f"Here's a news article: {text}. Can you summarize it for me in japanese?"},
             ],
             max_tokens=300
         )
 
         # 要約を取得
-        summary = response['choices'][0]['message']['content']
+        summary = response_summary['choices'][0]['message']['content']
 
         # ディスコードに送信するメッセージをフォーマット
-        message = f"🗞{website.brand}\n🧳{a.title}\n{summary}\n🔗{a.url}"
+        message = f"🗞{website.brand}\n{category}\n🧳{a.title}\n{summary}\n🔗{a.url}"
 
         # ディスコードに送信
         data = {
