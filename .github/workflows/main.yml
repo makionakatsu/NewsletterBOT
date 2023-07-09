@@ -24,4 +24,4 @@ jobs:
     - name: Run script
       env:
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-      run: python .py
+      run: python main.py
