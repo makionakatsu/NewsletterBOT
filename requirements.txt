@@ -1,4 +1,2 @@
 openai
 newspaper3k
-flask
-line-bot-sdk

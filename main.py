@@ -1,9 +1,11 @@
 import os
 import newspaper
 import openai
+import requests
 
-# GitHub SecretsからAPIキーを読み込む
+# GitHub SecretsからAPIキーとWebhookのURLを読み込む
 openai.api_key = os.getenv('OPENAI_API_KEY')
+WEBHOOK_URL = os.getenv('DISCORD_WEBHOOK_URL')
 
 # リポジトリ内のテキストファイルからニュースサイトのURLを読み込む
 with open('news_sites.txt', 'r') as f:
@@ -38,7 +40,8 @@ for url in urls:
         # 要約を取得
         summary = response['choices'][0]['message']['content']
 
-        # 要約を表示
-        print('Title:', a.title)
-        print('Summary:', summary)
-        print()
+        # 要約を表示する代わりにディスコードに送信
+        data = {
+            "content": f"Title: {a.title}\nSummary: {summary}"
+        }
+        response = requests.post(WEBHOOK_URL, data=data)
