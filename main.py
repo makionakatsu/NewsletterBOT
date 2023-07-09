@@ -30,7 +30,7 @@ for url in urls:
 
         # GPT-3.5-turboを使って記事を要約
         response = openai.ChatCompletion.create(
-          model="gpt-3.5-turbo",
+          model="gpt-3.5-turbo-16k",
           messages=[
                 {"role": "system", "content": "You are a helpful assistant that summarizes news articles into around 200 characters."},
                 {"role": "user", "content": f"Here's a news article: {text}. Can you summarize it for me in japanese?"},
