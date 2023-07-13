@@ -2,6 +2,7 @@ import os
 import newspaper
 import openai
 import requests
+from datetime import datetime
 
 # GitHub SecretsからAPIキーを読み込む
 openai.api_key = os.getenv('OPENAI_API_KEY')
@@ -13,13 +14,16 @@ WEBHOOK_URLS = os.getenv('DISCORD_WEBHOOK_URL').split(',')
 with open('news_sites.txt', 'r') as f:
     urls = [line.strip() for line in f]
 
+# 当日の日付を取得
+today = datetime.now()
+
 # 各URLについて
 for url in urls:
     # このウェブサイトから記事を取得
     website = newspaper.build(url)
 
-    # 最初の3記事を取得
-    articles = website.articles[:3]
+    # 当日公開された記事を取得
+    articles = [article for article in website.articles if article.publish_date.date() == today.date()]
 
     # 各記事について
     for a in articles:
