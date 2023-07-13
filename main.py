@@ -44,7 +44,7 @@ for url in urls:
         summary = response_summary['choices'][0]['message']['content']
 
         # ディスコードに送信するメッセージをフォーマット
-        message = f"🗞{website.brand}\🧳{a.title}\n{summary}\n🔗{a.url}"
+        message = f"🗞{website.brand}\n📝{a.title}\n{summary}\n🔗{a.url}\n⌐◨-◨ ⌐◨-◨ ⌐◨-◨ ⌐◨-◨ ⌐◨-◨ ⌐◨-◨\n\n"
 
         # 各ウェブフックURLに対してディスコードに送信
         for webhook_url in WEBHOOK_URLS:
