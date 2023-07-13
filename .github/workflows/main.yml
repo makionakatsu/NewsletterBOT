@@ -24,10 +24,10 @@ jobs:
     - name: Run script for server 1
       env:
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL_pNouns }}
+        DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL_PNOUNS }}
       run: python main.py
     - name: Run script for server 2
       env:
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL_Test }}
+        DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL_TEST }}
       run: python main.py
