@@ -1,12 +1,10 @@
-https://www.cnet.com/
-https://gizmodo.com/
-https://www.wired.com/
-https://readwrite.com/
-https://mashable.com/tech
+https://readwrite.com/category/ai/
+https://readwrite.com/category/blockchain/
 https://venturebeat.com/
 https://www.vox.com/technology
 https://www.engadget.com/
 https://www.macrumors.com/
 https://techcrunch.com/
-https://www.theblock.co/
-https://decrypt.co/
+https://techcrunch.com/category/artificial-intelligence/
+https://www.theblock.co/latest
+https://decrypt.co/news/editors-picks
