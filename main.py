@@ -3,9 +3,11 @@ import newspaper
 import openai
 import requests
 
-# GitHub SecretsからAPIキーとWebhookのURLを読み込む
+# GitHub SecretsからAPIキーを読み込む
 openai.api_key = os.getenv('OPENAI_API_KEY')
-WEBHOOK_URL = os.getenv('DISCORD_WEBHOOK_URL')
+
+# ウェブフックURLを読み込み、カンマで区切られたリストに変換する
+WEBHOOK_URLS = os.getenv('DISCORD_WEBHOOK_URL').split(',')
 
 # リポジトリ内のテキストファイルからニュースサイトのURLを読み込む
 with open('news_sites.txt', 'r') as f:
@@ -44,8 +46,9 @@ for url in urls:
         # ディスコードに送信するメッセージをフォーマット
         message = f"🗞{website.brand}\🧳{a.title}\n{summary}\n🔗{a.url}"
 
-        # ディスコードに送信
-        data = {
-            "content": message
-        }
-        response = requests.post(WEBHOOK_URL, data=data)
+        # 各ウェブフックURLに対してディスコードに送信
+        for webhook_url in WEBHOOK_URLS:
+            data = {
+                "content": message
+            }
+            response = requests.post(webhook_url.strip(), data=data)
