@@ -23,7 +23,7 @@ for url in urls:
     website = newspaper.build(url)
 
     # 当日公開された記事を取得
-    articles = [article for article in website.articles if article.publish_date.date() == today.date()]
+    articles = [article for article in website.articles if datetime.strptime(article.publish_date, '%Y-%m-%d').date() == today.date()]
 
     # 各記事について
     for a in articles:
