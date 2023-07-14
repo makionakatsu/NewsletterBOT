@@ -23,7 +23,13 @@ for url in urls:
     website = newspaper.build(url)
 
     # 当日公開された記事を取得
-    articles = [article for article in website.articles if datetime.strptime(article.publish_date, '%Y-%m-%d').date() == today.date()]
+    articles = []
+    for article in website.articles:
+        try:
+            if datetime.strptime(article.publish_date, '%Y-%m-%d').date() == today.date():
+                articles.append(article)
+        except ValueError:
+            continue
 
     # 各記事について
     for a in articles:
@@ -48,7 +54,7 @@ for url in urls:
         summary = response_summary['choices'][0]['message']['content']
 
         # ディスコードに送信するメッセージをフォーマット
-        message = f"⌐◨-◨ ⌐◨-◨ ⌐◨-◨ ⌐◨-◨ ⌐◨-◨ ⌐◨-◨\n🗞{website.brand}\n📝{a.title}\n{summary}\n🔗{a.url}\n\n"
+        message = f"🗞{website.brand}\n📝{a.title}\n{summary}\n🔗{a.url}\n⌐◨-◨ ⌐◨-◨ ⌐◨-◨ ⌐◨-◨ ⌐◨-◨ ⌐◨-◨\n\n"
 
         # 各ウェブフックURLに対してディスコードに送信
         for webhook_url in WEBHOOK_URLS:
@@ -56,3 +62,4 @@ for url in urls:
                 "content": message
             }
             response = requests.post(webhook_url.strip(), data=data)
+
