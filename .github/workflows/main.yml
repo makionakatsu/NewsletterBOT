@@ -3,7 +3,7 @@ name: Run Python script
 on: 
   schedule:
     # 日本時間の毎朝7時（UTCの毎日22時）に実行
-    - cron: '0 22 * * *'
+#    - cron: '0 22 * * *'
   workflow_dispatch:
     # 手動実行を許可
 
