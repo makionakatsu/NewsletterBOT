@@ -1,7 +1,11 @@
 import os
+import datetime
 import newspaper
 import openai
 import requests
+
+# 現在の日付を取得
+today = datetime.date.today()
 
 # GitHub SecretsからAPIキーを読み込む
 openai.api_key = os.getenv('OPENAI_API_KEY')
@@ -23,32 +27,37 @@ for url in urls:
 
     # 各記事について
     for a in articles:
-        # 記事をダウンロード
+        # 記事をダウンロードして解析
         a.download()
         a.parse()
 
-        # 記事の本文を取得
-        text = a.text
+        # 記事の掲載日を取得
+        publish_date = a.publish_date
 
-        # GPT-3.5-turboを使って記事を要約
-        response_summary = openai.ChatCompletion.create(
-          model="gpt-3.5-turbo-16k",
-          messages=[
-                {"role": "system", "content": "You are an assistant who summarizes news articles in Japanese into about 200 characters. You can generate interesting sentences."},
-                {"role": "user", "content": f"Here's a news article: {text}. Can you summarize it for me in japanese?"},
-            ],
-            max_tokens=300
-        )
+        # 掲載日が今日の場合のみ処理を続ける
+        if publish_date and publish_date.date() == today:
+            # 記事の本文を取得
+            text = a.text
 
-        # 要約を取得
-        summary = response_summary['choices'][0]['message']['content']
+            # GPT-3.5-turboを使って記事を要約
+            response_summary = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo-16k",
+                messages=[
+                    {"role": "system", "content": "You are an assistant who summarizes news articles in Japanese into about 200 characters. You can generate interesting sentences."},
+                    {"role": "user", "content": f"Here's a news article: {text}. Can you summarize it for me in japanese?"},
+                ],
+                max_tokens=300
+            )
 
-        # ディスコードに送信するメッセージをフォーマット
-        message = f"🗞{website.brand}\n📝{a.title}\n{summary}\n🔗{a.url}\n⌐◨-◨ ⌐◨-◨ ⌐◨-◨ ⌐◨-◨ ⌐◨-◨ ⌐◨-◨\n\n"
+            # 要約を取得
+            summary = response_summary['choices'][0]['message']['content']
 
-        # 各ウェブフックURLに対してディスコードに送信
-        for webhook_url in WEBHOOK_URLS:
-            data = {
-                "content": message
-            }
-            response = requests.post(webhook_url.strip(), data=data)
+            # ディスコードに送信するメッセージをフォーマット
+            message = f"🗞{website.brand}\n📝{a.title}\n{summary}\n🔗{a.url}\n⌐◨-◨ ⌐◨-◨ ⌐◨-◨ ⌐◨-◨ ⌐◨-◨ ⌐◨-◨\n\n"
+
+            # 各ウェブフックURLに対してディスコードに送信
+            for webhook_url in WEBHOOK_URLS:
+                data = {
+                    "content": message
+                }
+                response = requests.post(webhook_url.strip(), data=data)
