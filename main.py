@@ -1,14 +1,17 @@
 import os
 import datetime
 import newspaper
-import openai
+from openai import OpenAI
 import requests
 
 # 現在の日付を取得
 today = datetime.date.today()
 
 # GitHub SecretsからAPIキーを読み込む
-openai.api_key = os.getenv('OPENAI_API_KEY')
+openai_api_key = os.getenv('OPENAI_API_KEY')
+
+# OpenAI API キーの設定
+client = OpenAI()
 
 # ウェブフックURLを読み込み、カンマで区切られたリストに変換する
 WEBHOOK_URLS = os.getenv('DISCORD_WEBHOOK_URL').split(',')
@@ -40,7 +43,7 @@ for url in urls:
             text = a.text
 
             # GPT-3.5-turboを使って記事を要約
-            response_summary = openai.ChatCompletion.create(
+            response_summary = client.chat.completions.create(
                 model="gpt-3.5-turbo-16k",
                 messages=[
                     {"role": "system", "content": "You are an assistant who summarizes news articles in Japanese into about 200 characters. You can generate interesting sentences."},
@@ -50,7 +53,7 @@ for url in urls:
             )
 
             # 要約を取得
-            summary = response_summary['choices'][0]['message']['content']
+            summary = response_summary.choices[0].message.content
 
             # ディスコードに送信するメッセージをフォーマット
             message = f"🗞{website.brand}\n📝{a.title}\n{summary}\n🔗{a.url}\n⌐◨-◨ ⌐◨-◨ ⌐◨-◨ ⌐◨-◨ ⌐◨-◨ ⌐◨-◨\n\n"
