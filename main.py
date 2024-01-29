@@ -56,7 +56,7 @@ for url in urls:
             summary = response_summary.choices[0].message.content
 
             # ディスコードに送信するメッセージをフォーマット
-            message = f"🗞{website.brand}\n📝{a.title}\n{summary}\n🔗{a.url}\n⌐◨-◨ ⌐◨-◨ ⌐◨-◨ ⌐◨-◨ ⌐◨-◨ ⌐◨-◨\n\n"
+            message = f"🗞{website.brand}\n📝**{a.title}**\n{summary}\n🔗{a.url}\n⌐◨-◨ ⌐◨-◨ ⌐◨-◨ ⌐◨-◨ ⌐◨-◨ ⌐◨-◨\n\n"
             print(message)
             
             # 各ウェブフックURLに対してディスコードに送信
