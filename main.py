@@ -57,7 +57,8 @@ for url in urls:
 
             # ディスコードに送信するメッセージをフォーマット
             message = f"🗞{website.brand}\n📝{a.title}\n{summary}\n🔗{a.url}\n⌐◨-◨ ⌐◨-◨ ⌐◨-◨ ⌐◨-◨ ⌐◨-◨ ⌐◨-◨\n\n"
-
+            print(message)
+            
             # 各ウェブフックURLに対してディスコードに送信
             for webhook_url in WEBHOOK_URLS:
                 data = {
